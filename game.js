@@ -58,21 +58,28 @@ window.addEventListener('keyup', e => {
 // Gérer les contrôles tactiles
 canvas.addEventListener('touchstart', (e) => {
     const touchX = e.touches[0].clientX;
-    if (touchX < canvas.width / 2) {
-        // Si on touche à gauche de l'écran
+    const touchY = e.touches[0].clientY;
+
+    // Vérifiez si l'utilisateur touche la flèche gauche
+    if (touchX < canvas.width / 2 - 50 && touchY > canvas.height - 70) {
         keys['ArrowLeft'] = true;
-    } else {
-        // Si on touche à droite de l'écran
+    } 
+    // Vérifiez si l'utilisateur touche la flèche droite
+    else if (touchX > canvas.width / 2 + 50 && touchY > canvas.height - 70) {
         keys['ArrowRight'] = true;
+    } 
+    // Vérifiez si l'utilisateur touche le bouton de saut
+    else if (touchX > canvas.width / 2 - 25 && touchX < canvas.width / 2 + 25 && touchY > canvas.height - 70) {
+        if (player.grounded) {
+            player.speedY = jumpStrength;
+            player.grounded = false;
+        }
     }
 });
 
 canvas.addEventListener('touchend', () => {
     keys['ArrowLeft'] = false;
     keys['ArrowRight'] = false;
-    if (player.grounded) {
-        player.speedY = jumpStrength;
-    }
 });
 
 // Fonction de mise à jour du jeu
@@ -162,6 +169,36 @@ function draw() {
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
     ctx.fillText(`Score: ${score}`, 10, 30); // Afficher le score en haut à gauche
+
+    // Dessiner les contrôles
+    drawControls();
+}
+
+// Fonction pour dessiner les flèches directionnelles
+function drawControls() {
+    ctx.fillStyle = 'gray'; // Couleur de fond des flèches
+
+    // Flèche gauche
+    ctx.beginPath();
+    ctx.moveTo(50, canvas.height - 50);
+    ctx.lineTo(30, canvas.height - 70);
+    ctx.lineTo(30, canvas.height - 30);
+    ctx.closePath();
+    ctx.fill();
+
+    // Flèche droite
+    ctx.beginPath();
+    ctx.moveTo(canvas.width - 50, canvas.height - 50);
+    ctx.lineTo(canvas.width - 30, canvas.height - 70);
+    ctx.lineTo(canvas.width - 30, canvas.height - 30);
+    ctx.closePath();
+    ctx.fill();
+
+    // Flèche saut
+    ctx.fillStyle = 'lightblue'; // Couleur de fond du saut
+    ctx.fillRect(canvas.width / 2 - 25, canvas.height - 70, 50, 20); // Bouton de saut
+    ctx.fillStyle = 'black';
+    ctx.fillText('Sauter', canvas.width / 2 - 15, canvas.height - 55); // Texte du saut
 }
 
 // Fonction de game over
