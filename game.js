@@ -2,9 +2,9 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 // Paramètres du jeu
-const gravity = 0.5;
+const gravity = 0.3; // Réduire la gravité pour ralentir la chute
 const jumpStrength = -10;
-const speed = 5;
+const speed = 2; // Réduire la vitesse de déplacement
 let scrollOffset = 0; // Décalage de défilement
 let gameOverState = false; // État de Game Over
 let score = 0; // Initialiser le score
@@ -39,11 +39,48 @@ const obstacles = [
 ];
 
 // Gérer les touches
-let keys = {};
+let keys = {
+    left: false,
+    right: false,
+    jump: false
+};
 
+// Gestion des touches physiques
+canvas.addEventListener('touchstart', (e) => {
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+
+    // Vérifiez si l'utilisateur touche la flèche gauche
+    if (touchX < canvas.width / 2 - 50 && touchY > canvas.height - 70) {
+        keys.left = true;
+    } 
+    // Vérifiez si l'utilisateur touche la flèche droite
+    else if (touchX > canvas.width / 2 + 50 && touchY > canvas.height - 70) {
+        keys.right = true;
+    } 
+    // Vérifiez si l'utilisateur touche le bouton de saut
+    else if (touchX > canvas.width / 2 - 25 && touchX < canvas.width / 2 + 25 && touchY > canvas.height - 70) {
+        if (player.grounded) {
+            player.speedY = jumpStrength;
+            player.grounded = false;
+        }
+        keys.jump = true; // Mettez à jour l'état du saut
+    }
+});
+
+canvas.addEventListener('touchend', () => {
+    keys.left = false;
+    keys.right = false;
+    keys.jump = false; // Réinitialiser l'état du saut
+});
+
+// Gérer les touches au clavier pour le jeu
 window.addEventListener('keydown', e => {
-    keys[e.key] = true;
-
+    if (e.key === 'ArrowLeft') {
+        keys.left = true;
+    } else if (e.key === 'ArrowRight') {
+        keys.right = true;
+    }
     // Si la touche 'Espace' est pressée et que le joueur est au sol, il saute
     if (e.key === ' ' && player.grounded) {
         player.speedY = jumpStrength;
@@ -52,34 +89,11 @@ window.addEventListener('keydown', e => {
 });
 
 window.addEventListener('keyup', e => {
-    keys[e.key] = false;
-});
-
-// Gérer les contrôles tactiles
-canvas.addEventListener('touchstart', (e) => {
-    const touchX = e.touches[0].clientX;
-    const touchY = e.touches[0].clientY;
-
-    // Vérifiez si l'utilisateur touche la flèche gauche
-    if (touchX < canvas.width / 2 - 50 && touchY > canvas.height - 70) {
-        keys['ArrowLeft'] = true;
-    } 
-    // Vérifiez si l'utilisateur touche la flèche droite
-    else if (touchX > canvas.width / 2 + 50 && touchY > canvas.height - 70) {
-        keys['ArrowRight'] = true;
-    } 
-    // Vérifiez si l'utilisateur touche le bouton de saut
-    else if (touchX > canvas.width / 2 - 25 && touchX < canvas.width / 2 + 25 && touchY > canvas.height - 70) {
-        if (player.grounded) {
-            player.speedY = jumpStrength;
-            player.grounded = false;
-        }
+    if (e.key === 'ArrowLeft') {
+        keys.left = false;
+    } else if (e.key === 'ArrowRight') {
+        keys.right = false;
     }
-});
-
-canvas.addEventListener('touchend', () => {
-    keys['ArrowLeft'] = false;
-    keys['ArrowRight'] = false;
 });
 
 // Fonction de mise à jour du jeu
@@ -87,9 +101,9 @@ function update() {
     if (gameOverState) return; // Ne met à jour rien si le jeu est terminé
 
     // Déplacement horizontal
-    if (keys['ArrowLeft'] && player.x > 0) { // Empêche de revenir au début
+    if (keys.left && player.x > 0) { // Empêche de revenir au début
         player.speedX = -speed;
-    } else if (keys['ArrowRight']) {
+    } else if (keys.right) {
         player.speedX = speed;
     } else {
         player.speedX = 0;
@@ -103,14 +117,14 @@ function update() {
     player.y += player.speedY;
 
     // Si le joueur atteint la position de 60% de la largeur du canvas et se déplace vers la droite
-    if (player.x > canvas.width * 0.6 && keys['ArrowRight']) {
+    if (player.x > canvas.width * 0.6 && keys.right) {
         scrollOffset += player.speedX;
         player.x = canvas.width * 0.6; // Garde le joueur à cette position pendant le défilement
         score++; // Augmenter le score avec le défilement
     }
 
     // Si le joueur atteint la position de 40% de la largeur du canvas et se déplace vers la gauche
-    if (player.x < canvas.width * 0.4 && keys['ArrowLeft'] && scrollOffset > 0) {
+    if (player.x < canvas.width * 0.4 && keys.left && scrollOffset > 0) {
         scrollOffset += player.speedX;
         player.x = canvas.width * 0.4; // Garde le joueur à cette position pendant le défilement
     }
@@ -198,17 +212,13 @@ function drawControls() {
     ctx.fillStyle = 'lightblue'; // Couleur de fond du saut
     ctx.fillRect(canvas.width / 2 - 25, canvas.height - 70, 50, 20); // Bouton de saut
     ctx.fillStyle = 'black';
-    ctx.fillText('Sauter', canvas.width / 2 - 15, canvas.height - 55); // Texte du saut
+    ctx.fillText('Saut', canvas.width / 2 - 15, canvas.height - 55);
 }
 
-// Fonction de game over
+// Fonction de Game Over
 function gameOver() {
-    if (!gameOverState) { // Vérifiez si le jeu est déjà terminé
-        gameOverState = true; // Définir l'état de game over
-        alert(`Game Over! Vous avez heurté un obstacle ! Votre score est ${score}`);
-        // Réinitialiser le jeu ou recharger la page
-        location.reload(); 
-    }
+    gameOverState = true;
+    alert(`Game Over! Your score: ${score}`);
 }
 
 // Boucle de jeu
@@ -218,7 +228,4 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-// Démarrer la boucle de jeu
-player.image.onload = function() {
-    gameLoop(); // Démarrer la boucle de jeu après le chargement de l'image
-};
+gameLoop(); // Démarrer la boucle de jeu
