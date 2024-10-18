@@ -2,9 +2,9 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 // Paramètres du jeu
-const gravity = 0.3; // Réduire la gravité pour ralentir la chute
+const gravity = 0.3; // Gravité
 const jumpStrength = -10;
-const speed = 2; // Réduire la vitesse de déplacement
+const speed = 2; // Vitesse de déplacement
 let scrollOffset = 0; // Décalage de défilement
 let gameOverState = false; // État de Game Over
 let score = 0; // Initialiser le score
@@ -81,7 +81,7 @@ window.addEventListener('keydown', e => {
     } else if (e.key === 'ArrowRight') {
         keys.right = true;
     }
-    // Si la touche 'Espace' est pressée et que le joueur est au sol, il saute
+    // Permet au joueur de sauter même s'il se déplace
     if (e.key === ' ' && player.grounded) {
         player.speedY = jumpStrength;
         player.grounded = false;
