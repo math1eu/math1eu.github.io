@@ -31,8 +31,6 @@ function startGame() {
         timeLeftDisplay.textContent = timeLeft;
         if (timeLeft <= 0) {
             endGame();
-        } else {
-            showDot();
         }
     }, 1000);
 
@@ -41,18 +39,12 @@ function startGame() {
 
 // Fonction pour afficher le point à un endroit aléatoire
 function showDot() {
-    const x = Math.floor(Math.random() * (gameContainer.clientWidth - 40));
-    const y = Math.floor(Math.random() * (gameContainer.clientHeight - 40));
+    const x = Math.floor(Math.random() * (gameContainer.clientWidth - 50));
+    const y = Math.floor(Math.random() * (gameContainer.clientHeight - 50));
     
     dot.style.left = `${x}px`;
     dot.style.top = `${y}px`;
     dot.style.display = 'block';
-
-    // Cache le point après un certain temps si le joueur ne clique pas dessus
-    clearTimeout(dotTimeout);
-    dotTimeout = setTimeout(() => {
-        dot.style.display = 'none';
-    }, 800);
 }
 
 // Fonction pour gérer le clic sur le point
@@ -60,6 +52,7 @@ dot.addEventListener('click', () => {
     score++;
     scoreDisplay.textContent = score;
     dot.style.display = 'none';
+    showDot(); // Affiche le point à un autre endroit immédiatement après un clic
 });
 
 // Fonction pour terminer le jeu
