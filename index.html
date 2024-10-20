@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tap the Dot</title>
+    <title>Attrape Noam</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Tap the Dot</h1>
+    <h1>Attrape Noam</h1>
     <div id="game-container">
-        <div id="dot"></div>
+        <img id="dot" src="point.png" alt="point" />
     </div>
     <div id="score-board">
-        <p>Score: <span id="score">0</span></p>
-        <p>Time left: <span id="time-left">30</span>s</p>
+        <p>Score : <span id="score">0</span></p>
+        <p>Temps restant : <span id="time-left">30</span>s</p>
     </div>
-    <button id="start-button">Start Game</button>
+    <button id="start-button">Démarrer le jeu</button>
+
+    <div id="top-scores">
+        <h2>Top 5 Meilleurs Scores</h2>
+        <ol id="score-list">
+            <!-- Les scores seront affichés ici -->
+        </ol>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -21,11 +21,10 @@ body {
 
 #dot {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: red;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   display: none;
+  cursor: pointer;
 }
 
 #score-board {
@@ -37,4 +36,16 @@ body {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#top-scores {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#score-list {
+  list-style-type: decimal;
+  padding: 0;
+  margin: 0;
 }
