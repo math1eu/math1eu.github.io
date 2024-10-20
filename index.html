@@ -1,26 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            background: #87ceeb; /* ciel bleu */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        canvas {
-            border: 2px solid #000;
-        }
-    </style>
+    <title>Tap the Dot</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="gameCanvas" width="400" height="300"></canvas>
-    <script src="game.js"></script>
+    <h1>Tap the Dot</h1>
+    <div id="game-container">
+        <div id="dot"></div>
+    </div>
+    <div id="score-board">
+        <p>Score: <span id="score">0</span></p>
+        <p>Time left: <span id="time-left">30</span>s</p>
+    </div>
+    <button id="start-button">Start Game</button>
+
+    <script src="script.js"></script>
 </body>
 </html>
