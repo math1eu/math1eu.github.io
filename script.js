@@ -83,6 +83,15 @@ function generateRedDot() {
         redDotClickSound.play(); // Joue le son de clic sur le point rouge
     });
 
+    // Événement pour les appareils tactiles
+    redDot.addEventListener('touchend', () => {
+    score--;
+    scoreDisplay.textContent = score;
+    flashScreen();
+    redDot.remove(); // Retirer le point rouge quand il est cliqué
+    redDotClickSound.play(); // Joue le son de clic sur le point rouge
+});
+
     // Faire bouger le point rouge
     moveRedDot(redDot);
 }
