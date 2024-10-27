@@ -86,3 +86,22 @@ h1 {
 #score-list li {
   margin: 5px 0;
 }
+
+.blur-effect {
+  filter: blur(5px); /* Applique un flou de 5 pixels */
+  transition: filter 0.3s ease; /* Transition douce */
+}
+
+.red-dot {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* Flash rouge */
+.flash-red {
+  background-color: rgba(255, 0, 0, 0.5); /* Couleur rouge semi-transparente */
+  transition: background-color 0.3s ease; /* Transition douce */
+}
